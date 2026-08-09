@@ -19,11 +19,15 @@ def clean_text(text: str | None) -> str:
     return " ".join(text.split())
 
 
-def fetch_articles() -> list[dict]:
+def fetch_articles(
+        max_results: int = 3,
+        start: int = 0,
+        search_query: str = "cat:cs.AI",
+) -> list[dict]:
     params = {
-        "search_query": "cat:cs.AI",
-        "start": 0,
-        "max_results": 3,
+        "search_query": search_query,
+        "start": start,
+        "max_results": max_results,
     }
 
     response = requests.get(
@@ -61,15 +65,15 @@ def fetch_articles() -> list[dict]:
     return articles
 
 
-def fetch_normalized_articles() -> list[Article]:
-    raw_articles = fetch_articles()
+def fetch_normalized_articles(max_results: int = 3) -> list[Article]:
+    raw_articles = fetch_articles(max_results=max_results)
     normalized_articles = [normalize_arxiv_article(raw_article)
                            for raw_article in raw_articles]
     return normalized_articles
 
 
 if __name__ == "__main__":
-    articles = fetch_normalized_articles()
+    articles = fetch_normalized_articles(max_results=100)
 
     save_articles_to_json(
         articles,
