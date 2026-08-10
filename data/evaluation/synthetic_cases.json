@@ -1,0 +1,22 @@
+[
+  {
+    "query": "How can reinforcement learning agents be protected against adversarial attacks?",
+    "expected_article_id": "1906.01119v1"
+  },
+  {
+    "query": "How can an attacker exploit an agent that learned by imitating another policy?",
+    "expected_article_id": "1906.01121v1"
+  },
+  {
+    "query": "Can competing agents develop deceptive or adversarial communication strategies?",
+    "expected_article_id": "2008.02616v2"
+  },
+  {
+    "query": "How can deep reinforcement learning control highway ramp traffic using video data?",
+    "expected_article_id": "2012.12104v1"
+  },
+  {
+    "query": "How should artificial intelligence algorithms be designed for controlling electrical power grids?",
+    "expected_article_id": "2012.13026v1"
+  }
+]

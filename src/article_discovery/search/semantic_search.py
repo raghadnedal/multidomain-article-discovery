@@ -43,7 +43,9 @@ def semantic_search(query: str, top_k: int = 3) -> list[dict]:
 
         results.append(
             {
+                "external_id": article["external_id"],
                 "title": article["title"],
+                "abstract": article["abstract"],
                 "score": float(similarity_scores[index]),
                 "url": article["url"],
             }
