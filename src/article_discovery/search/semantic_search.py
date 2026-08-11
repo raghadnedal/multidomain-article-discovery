@@ -1,24 +1,12 @@
-import json
-from pathlib import Path
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
-import numpy as np
-
+from article_discovery.database.connection import engine
+from article_discovery.database.models import ArticleModel
 from article_discovery.embeddings.encoder import load_embedding_model
 
 
-ARTICLES_PATH = Path("data/processed/arxiv_articles.json")
-EMBEDDINGS_PATH = Path("data/processed/arxiv_embeddings.npz")
-
-
 def semantic_search(query: str, top_k: int = 3) -> list[dict]:
-    with ARTICLES_PATH.open("r", encoding="utf-8") as file:
-        articles = json.load(file)
-
-    saved_data = np.load(EMBEDDINGS_PATH)
-
-    article_embeddings = saved_data["embeddings"]
-    article_ids = saved_data["article_ids"]
-
     model = load_embedding_model()
 
     query_embedding = model.encode(
@@ -26,30 +14,30 @@ def semantic_search(query: str, top_k: int = 3) -> list[dict]:
         normalize_embeddings=True,
     )
 
-    similarity_scores = article_embeddings @ query_embedding
+    distance = ArticleModel.embedding.cosine_distance(
+        query_embedding.tolist()
+    )
 
-    ranked_indices = np.argsort(similarity_scores)[::-1]
+    statement = (
+        select(ArticleModel, distance.label("distance"))
+        .where(ArticleModel.embedding.is_not(None))
+        .order_by(distance)
+        .limit(top_k)
+    )
 
     results = []
 
-    for index in ranked_indices[:top_k]:
-        article_id = article_ids[index]
+    with Session(engine) as session:
+        rows = session.execute(statement)
 
-        article = next(
-            article
-            for article in articles
-            if article["external_id"] == article_id
-        )
-
-        results.append(
-            {
-                "external_id": article["external_id"],
-                "title": article["title"],
-                "abstract": article["abstract"],
-                "score": float(similarity_scores[index]),
-                "url": article["url"],
-            }
-        )
+        for article, cosine_distance in rows:
+            results.append({
+                "external_id": article.external_id,
+                "title": article.title,
+                "abstract": article.abstract,
+                "score": 1 - float(cosine_distance),
+                "url": article.url,
+            })
 
     return results
 

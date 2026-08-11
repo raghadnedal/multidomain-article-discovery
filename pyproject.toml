@@ -9,8 +9,10 @@ description = "A semantic article discovery and recommendation platform"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
- "requests>=2.32,<3",
- "sentence-transformers>=5.7,<6",
+    "requests>=2.32,<3",
+    "sentence-transformers>=5.7,<6",
+    "fastapi>=0.141,<1",
+    "uvicorn>=0.52,<1",
 ]
 
 [tool.setuptools.packages.find]

@@ -1,9 +1,10 @@
 from sentence_transformers import CrossEncoder
-
+from functools import lru_cache
 
 RERANKER_MODEL_NAME = "BAAI/bge-reranker-v2-m3"
 
 
+@lru_cache
 def load_reranker() -> CrossEncoder:
     return CrossEncoder(RERANKER_MODEL_NAME)
 
