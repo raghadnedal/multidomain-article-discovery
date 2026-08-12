@@ -12,3 +12,7 @@ class SearchResponse (BaseModel):
     score: float
     reranker_score: float
     url: str
+
+
+class RecommendationRequest(BaseModel):
+    interests: list[str]

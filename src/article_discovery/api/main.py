@@ -1,7 +1,8 @@
 from fastapi import FastAPI, Query
 
-from article_discovery.api.schemas import SearchResponse
+from article_discovery.api.schemas import SearchResponse, RecommendationRequest
 from article_discovery.search.reranked_search import search_with_reranking
+from article_discovery.recommendation.recommender import recommend_articles
 from enum import Enum
 
 app = FastAPI(title="Multidomain Article Discovery",
@@ -30,4 +31,15 @@ def search(
         retrieve_k=10,
         final_k=3,
         domain=domain,
+    )
+
+
+@app.post("/recommend", response_model=list[SearchResponse])
+def recommend(
+    request: RecommendationRequest,
+) -> list[dict]:
+    return recommend_articles(
+        interests=request.interests,
+        retrieve_k=10,
+        final_k=3,
     )

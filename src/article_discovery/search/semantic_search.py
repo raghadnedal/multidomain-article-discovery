@@ -6,6 +6,45 @@ from article_discovery.database.models import ArticleModel
 from article_discovery.embeddings.encoder import load_embedding_model
 
 
+def search_by_embedding(
+    query_embedding: list[float],
+    top_k: int = 3,
+    domain: str | None = None,
+) -> list[dict]:
+    distance = ArticleModel.embedding.cosine_distance(
+        query_embedding
+    )
+
+    statement = (
+        select(ArticleModel, distance.label("distance"))
+        .where(ArticleModel.embedding.is_not(None))
+    )
+
+    if domain is not None:
+        domain = domain.strip()
+        statement = statement.where(ArticleModel.domain == domain)
+
+    statement = statement.order_by(distance).limit(top_k)
+
+    results = []
+
+    with Session(engine) as session:
+        rows = session.execute(statement)
+
+        for article, cosine_distance in rows:
+            results.append(
+                {
+                    "external_id": article.external_id,
+                    "title": article.title,
+                    "abstract": article.abstract,
+                    "score": 1 - float(cosine_distance),
+                    "url": article.url,
+                }
+            )
+
+    return results
+
+
 def semantic_search(
     query: str,
     top_k: int = 3,
@@ -18,42 +57,11 @@ def semantic_search(
         normalize_embeddings=True,
     )
 
-    distance = ArticleModel.embedding.cosine_distance(
-        query_embedding.tolist()
+    return search_by_embedding(
+        query_embedding=query_embedding.tolist(),
+        top_k=top_k,
+        domain=domain,
     )
-
-    statement = (
-        select(ArticleModel, distance.label("distance"))
-        .where(ArticleModel.embedding.is_not(None))
-    )
-
-    if domain is not None:
-        domain = domain.strip()
-        statement = statement.where(
-            ArticleModel.domain == domain
-        )
-
-    statement = (
-        statement
-        .order_by(distance)
-        .limit(top_k)
-    )
-
-    results = []
-
-    with Session(engine) as session:
-        rows = session.execute(statement)
-
-        for article, cosine_distance in rows:
-            results.append({
-                "external_id": article.external_id,
-                "title": article.title,
-                "abstract": article.abstract,
-                "score": 1 - float(cosine_distance),
-                "url": article.url,
-            })
-
-    return results
 
 
 if __name__ == "__main__":
