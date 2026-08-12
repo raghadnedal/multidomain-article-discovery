@@ -1,6 +1,8 @@
 from sqlalchemy import String, Text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from pgvector.sqlalchemy import Vector
+from datetime import datetime
+from sqlalchemy import DateTime
 
 
 class Base(DeclarativeBase):
@@ -15,7 +17,7 @@ class ArticleModel(Base):
     abstract: Mapped[str] = mapped_column(Text)
     domain: Mapped[str] = mapped_column(String)
     source: Mapped[str] = mapped_column(String)
-    published_at: Mapped[str] = mapped_column(String)
+    published_at: Mapped[datetime | None] = mapped_column(DateTime)
     url: Mapped[str] = mapped_column(Text)
     language: Mapped[str] = mapped_column(String)
     embedding: Mapped[list[float] | None] = mapped_column(Vector(1024))

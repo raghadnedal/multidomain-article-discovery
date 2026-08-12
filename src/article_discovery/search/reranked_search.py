@@ -4,12 +4,14 @@ from article_discovery.reranking.reranker import rerank_results
 
 def search_with_reranking(
     query: str,
+    domain: str | None = None,
     retrieve_k: int = 10,
     final_k: int = 3,
 ) -> list[dict]:
     candidate = semantic_search(
         query=query,
         top_k=retrieve_k,
+        domain=domain,
     )
 
     reranked = rerank_results(

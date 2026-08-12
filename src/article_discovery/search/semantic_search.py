@@ -6,7 +6,11 @@ from article_discovery.database.models import ArticleModel
 from article_discovery.embeddings.encoder import load_embedding_model
 
 
-def semantic_search(query: str, top_k: int = 3) -> list[dict]:
+def semantic_search(
+    query: str,
+    top_k: int = 3,
+    domain: str | None = None,
+) -> list[dict]:
     model = load_embedding_model()
 
     query_embedding = model.encode(
@@ -21,6 +25,16 @@ def semantic_search(query: str, top_k: int = 3) -> list[dict]:
     statement = (
         select(ArticleModel, distance.label("distance"))
         .where(ArticleModel.embedding.is_not(None))
+    )
+
+    if domain is not None:
+        domain = domain.strip()
+        statement = statement.where(
+            ArticleModel.domain == domain
+        )
+
+    statement = (
+        statement
         .order_by(distance)
         .limit(top_k)
     )
