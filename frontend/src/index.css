@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #1b2943;
+  background: #f6f8fc;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --ink: #15233e;
+  --muted: #66738a;
+  --accent: #4a63d8;
+  --accent-dark: #263d9a;
+  --line: #dfe5ef;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 7% 5%, rgba(201, 218, 255, 0.42), transparent 25rem),
+    radial-gradient(circle at 95% 20%, rgba(223, 220, 255, 0.45), transparent 28rem),
+    #f7f9fc;
+  transition: color .3s ease, background-color .3s ease;
+}
+
+html[data-theme='dark'] { color-scheme: dark; }
+html[data-theme='dark'] body {
+  background:
+    radial-gradient(circle at 8% 4%, rgba(62, 83, 150, .2), transparent 27rem),
+    radial-gradient(circle at 94% 18%, rgba(62, 57, 126, .16), transparent 30rem),
+    #101722;
+}
+
+button, input, select { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+
+::selection { color: #fff; background: #536bd6; }
+
+#root { min-height: 100vh; }

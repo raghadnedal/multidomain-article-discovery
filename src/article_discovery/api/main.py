@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Query
-
+from fastapi.middleware.cors import CORSMiddleware
 from article_discovery.api.schemas import SearchResponse, RecommendationRequest
 from article_discovery.search.reranked_search import search_with_reranking
 from article_discovery.recommendation.recommender import recommend_articles
@@ -7,6 +7,14 @@ from enum import Enum
 
 app = FastAPI(title="Multidomain Article Discovery",
               version="0.1.0",)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class Domain(str, Enum):
