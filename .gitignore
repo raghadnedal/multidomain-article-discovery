@@ -9,3 +9,5 @@ frontend/.env
 frontend/dist/
 .DS_Store
 *.egg-info/
+.env.neon
+articles_data.sql

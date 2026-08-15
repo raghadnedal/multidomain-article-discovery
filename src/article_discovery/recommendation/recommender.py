@@ -9,6 +9,7 @@ def recommend_articles(
     retrieve_k: int = 10,
     final_k: int = 3,
 ) -> list[dict]:
+
     user_profile = build_user_profile(interests)
 
     candidates = search_by_embedding(
@@ -19,9 +20,16 @@ def recommend_articles(
 
     interest_text = "; ".join(interests)
 
-    reranked = rerank_results(
-        query=interest_text,
-        results=candidates,
-    )
+    try:
+        reranked = rerank_results(
+            query=interest_text,
+            results=candidates,
+        )
 
-    return reranked[:final_k]
+        return reranked[:final_k]
+
+    except Exception:
+        for result in candidates:
+            result["reranker_score"] = result["score"]
+
+        return candidates[:final_k]

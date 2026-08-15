@@ -17,7 +17,7 @@ class ArticleModel(Base):
     abstract: Mapped[str] = mapped_column(Text)
     domain: Mapped[str] = mapped_column(String)
     source: Mapped[str] = mapped_column(String)
-    published_at: Mapped[datetime | None] = mapped_column(DateTime)
+    published_at: Mapped[str | None] = mapped_column(String)
     url: Mapped[str] = mapped_column(Text)
     language: Mapped[str] = mapped_column(String)
     embedding: Mapped[list[float] | None] = mapped_column(Vector(1024))

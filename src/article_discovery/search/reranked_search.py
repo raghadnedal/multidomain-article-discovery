@@ -1,5 +1,5 @@
-from article_discovery.search.semantic_search import semantic_search
 from article_discovery.reranking.reranker import rerank_results
+from article_discovery.search.semantic_search import semantic_search
 
 
 def search_with_reranking(
@@ -8,17 +8,25 @@ def search_with_reranking(
     retrieve_k: int = 10,
     final_k: int = 3,
 ) -> list[dict]:
-    candidate = semantic_search(
+
+    candidates = semantic_search(
         query=query,
         top_k=retrieve_k,
         domain=domain,
     )
 
-    reranked = rerank_results(
-        query=query,
-        results=candidate,
-    )
-    return reranked[:final_k]
+    try:
+        reranked = rerank_results(
+            query=query,
+            results=candidates,
+        )
+        return reranked[:final_k]
+
+    except Exception:
+        for result in candidates:
+            result["reranker_score"] = result["score"]
+
+        return candidates[:final_k]
 
 
 if __name__ == "__main__":
