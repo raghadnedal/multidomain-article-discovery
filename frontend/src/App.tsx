@@ -2,7 +2,7 @@ import './App.css'
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import ArticleCard from './components/ArticleCard'
 import type { Article } from './types/article'
-
+const API_URL = import.meta.env.VITE_API_URL
 function Icon({ children }: { children: ReactNode }) {
   return <span className="icon" aria-hidden="true">{children}</span>
 }
@@ -36,7 +36,9 @@ function App() {
       const params = new URLSearchParams({ query })
       if (domain) params.append('domain', domain)
 
-      const response = await fetch(`http://127.0.0.1:8000/search?${params.toString()}`)
+      const response = await fetch(
+        `${API_URL}/search?${params.toString()}`
+      )
       if (!response.ok) throw new Error('Search request failed')
       setResults(await response.json())
     } catch {
@@ -57,7 +59,8 @@ function App() {
         return
       }
 
-      const response = await fetch('http://127.0.0.1:8000/recommend', {
+      const response = await fetch(
+        `${API_URL}/recommend`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ interests: interestList }),
@@ -76,7 +79,7 @@ function App() {
       <header className="header">
         <a className="brand" href="#top" aria-label="Article Discovery home">
           <span className="brand-mark" aria-hidden="true">
-            <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="4"/><ellipse cx="16" cy="16" rx="13" ry="6"/><ellipse cx="16" cy="16" rx="6" ry="13" transform="rotate(42 16 16)"/></svg>
+            <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="4" /><ellipse cx="16" cy="16" rx="13" ry="6" /><ellipse cx="16" cy="16" rx="6" ry="13" transform="rotate(42 16 16)" /></svg>
           </span>
           <span><strong>Article Discovery</strong><small>AI Research Platform</small></span>
         </a>
@@ -99,7 +102,7 @@ function App() {
       <main id="top">
         <section className="hero">
           <div className="eyebrow"><span className="status-dot" /> AI-powered scientific discovery</div>
-          <h1>Discover research across<br/><span>multiple domains</span></h1>
+          <h1>Discover research across<br /><span>multiple domains</span></h1>
           <p>Search, discover, and get AI-powered research recommendations across medicine and artificial intelligence.</p>
           <div className="hero-tags" aria-label="Supported capabilities"><span>Semantic search</span><span>Cross-domain</span><span>AI recommendations</span></div>
         </section>

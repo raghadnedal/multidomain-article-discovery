@@ -1,6 +1,11 @@
+.env
+.env.docker
 .venv/
 __pycache__/
 *.pyc
-*.egg-info/
+data/
+frontend/node_modules/
+frontend/.env
+frontend/dist/
 .DS_Store
-.env
+*.egg-info/

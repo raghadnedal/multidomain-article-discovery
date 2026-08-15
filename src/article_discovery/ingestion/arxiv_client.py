@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 import requests
-from src.article_discovery.processing.normalization import normalize_arxiv_article
-from src.article_discovery.schemas.article import Article
+from article_discovery.processing.normalization import normalize_arxiv_article
+from article_discovery.schemas.article import Article
 from sqlalchemy.orm import Session
 from article_discovery.database.connection import engine
 from article_discovery.database.article_repository import article_exists

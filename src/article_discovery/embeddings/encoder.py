@@ -5,7 +5,7 @@ MODEL_NAME = "BAAI/bge-m3"
 
 @lru_cache
 def load_embedding_model() -> SentenceTransformer:
-    return SentenceTransformer(MODEL_NAME, local_files_only=True,)
+    return SentenceTransformer(MODEL_NAME)
 
 
 def encode_text(
