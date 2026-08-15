@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 from article_discovery.database.models import Base
-load_dotenv()
+load_dotenv(".env.neon")
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 

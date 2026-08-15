@@ -5,52 +5,70 @@ AI-powered platform for semantic scientific article discovery and personalized r
 ## Features
 
 - Semantic search using BGE-M3 embeddings
-- Cross-encoder reranking
+- Optional cross-encoder reranking with fallback to semantic similarity
 - Personalized article recommendations
 - PostgreSQL + pgvector vector search
 - arXiv and PubMed ingestion
 - FastAPI backend
 - React + TypeScript frontend
 - Dockerized backend
-- Scheduled ingestion pipeline
 
 ## Architecture
 
-arXiv / PubMed
-→ ingestion
-→ normalization + deduplication
-→ embeddings
-→ PostgreSQL + pgvector
-→ semantic retrieval
-→ reranking
-→ FastAPI
+arXiv / PubMed  
+→ ingestion  
+→ normalization + deduplication  
+→ embeddings  
+→ PostgreSQL + pgvector  
+→ semantic retrieval  
+→ optional reranking  
+→ FastAPI  
 → React frontend
 
 ## Tech Stack
 
-Backend:
+### Backend
 - Python
 - FastAPI
 - SQLAlchemy
 - PostgreSQL
 - pgvector
 
-AI:
+### AI
 - BGE-M3
 - BGE reranker
 - Sentence Transformers
 - PyTorch
 
-Frontend:
+### Frontend
 - React
 - TypeScript
 - Vite
 
-Infrastructure:
+### Infrastructure
 - Docker
+
+## Screenshots
+
+### Frontend
+![Frontend](docs/home.png)
+
+### Semantic Search
+![Search Results](docs/search-results.png)
+
+### FastAPI
+![FastAPI](docs/api.png)
 
 ## Current Status
 
-MVP implementation completed locally.
+The MVP is fully functional locally through the FastAPI backend and React frontend.
 
-Cloud deployment and scheduled ingestion are in progress.
+Cloud deployment was tested successfully at the service level, but transformer model memory requirements exceed practical free-tier hosting limits for full inference.
+
+## Future Improvements
+
+- Production deployment using higher-memory CPU/GPU infrastructure
+- Scheduled article ingestion
+- Automatic data refresh
+- Additional scientific domains
+- Advanced retrieval and recommendation evaluation
